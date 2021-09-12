@@ -1,6 +1,7 @@
 package com.push.articlereader.article.hackernews
 
 import com.push.articlereader.article.hackernews.dto.HackerNewsStoryDto
+import org.springframework.beans.factory.annotation.Qualifier
 import org.springframework.core.ParameterizedTypeReference
 import org.springframework.stereotype.Component
 import org.springframework.web.reactive.function.client.WebClient
@@ -10,7 +11,7 @@ import reactor.kotlin.core.publisher.toFlux
 import java.time.Duration
 
 @Component
-class HackerNewsRepo(private val hackerNewsClient: WebClient) {
+class HackerNewsRepo(@Qualifier("hackerNewsClient") private val hackerNewsClient: WebClient) {
     fun getTopStories(): Flux<HackerNewsStoryDto> {
         return getTopStoryIds()
             .delayElements(Duration.ofMillis(DELAY_BETWEEN_ARTICLES_MILLIS))

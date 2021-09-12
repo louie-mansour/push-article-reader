@@ -7,8 +7,9 @@ import org.springframework.web.reactive.function.client.WebClient
 
 @Configuration
 class ArbitraryArticleClientConfiguration {
+
     @Bean
-    fun unstructuredArticleClient(): WebClient {
+    fun arbitraryArticleClient(): WebClient {
         return WebClient.builder()
             .defaultHeader("cache-control", "no-cache")
             .exchangeStrategies(

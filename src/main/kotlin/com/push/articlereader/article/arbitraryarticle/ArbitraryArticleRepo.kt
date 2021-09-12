@@ -2,12 +2,13 @@ package com.push.articlereader.article.arbitraryarticle
 
 import com.push.articlereader.article.arbitraryarticle.dto.ArbitraryArticleDto
 import org.jsoup.Jsoup
+import org.springframework.beans.factory.annotation.Qualifier
 import org.springframework.stereotype.Component
 import org.springframework.web.reactive.function.client.WebClient
 import reactor.core.publisher.Mono
 
 @Component
-class ArbitraryArticleRepo(private val arbitraryArticleClient: WebClient) {
+class ArbitraryArticleRepo(@Qualifier("arbitraryArticleClient") private val arbitraryArticleClient: WebClient) {
 
     fun getArticle(url: String): Mono<ArbitraryArticleDto> {
         return arbitraryArticleClient

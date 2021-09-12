@@ -12,11 +12,11 @@ import java.time.Instant
 
 @Component
 class HackerNewsArticleService(
-    private val hackerNewsService: HackerNewsRepo,
+    private val hackerNewsRepo: HackerNewsRepo,
     private val unstructuredArticleService: ArbitraryArticleRepo) : IArticleService {
 
     override fun getArticles(): Flux<Article> {
-        return hackerNewsService.getTopStories()
+        return hackerNewsRepo.getTopStories()
             .flatMap { story ->
                 unstructuredArticleService.getArticle(story.url)
                     .map { transform(it, story) }

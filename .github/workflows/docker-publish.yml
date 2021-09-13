@@ -16,28 +16,29 @@ jobs:
       packages: write
 
     steps:
-      - name: Checkout repository
-        uses: actions/checkout@v2
+      - uses: actions/checkout@v2
+      - name: Build the Docker image
+        run: docker build . --file Dockerfile --tag ${{ env.IMAGE_NAME }}
 
-      - name: Log into registry ${{ env.REGISTRY }}
-        if: github.event_name != 'pull_request'
-        uses: docker/login-action@28218f9b04b4f3f62068d7b6ce6ca5b26e35336c
-        with:
-          registry: ${{ env.REGISTRY }}
-          username: ${{ github.actor }}
-          password: ${{ secrets.GITHUB_TOKEN }}
+      - name: Setup GCloud
+        uses: google-github-actions/setup-gcloud@master
 
-      - name: Extract Docker metadata
-        id: meta
-        uses: docker/metadata-action@98669ae865ea3cffbcbaa878cf57c20bbf1c6c38
+      - name: Push Docker image to GCR
+        uses: RafikFarhad/push-to-gcr-github-action@v4
         with:
-          tags: latest
-          images: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}
+          gcloud_service_key: ${{ secrets.PUSH_ARTICLE_READER_CI_SA }}
+          registry: gcr.io
+          project_id: push-to-date
+          image_name: ${{ env.IMAGE_NAME }}
 
-      - name: Build and push Docker image
-        uses: docker/build-push-action@ad44023a93711e3deb337508980b4b5e9bcdc5dc
+      - name: Deploy to Cloud Run
+        id: deploy
+        uses: google-github-actions/deploy-cloudrun@main
         with:
-          context: .
-          push: ${{ github.event_name != 'pull_request' }}
-          tags: ${{ steps.meta.outputs.tags }}
-          labels: ${{ steps.meta.outputs.labels }}
+          service: push-article-reader-run
+          image: gcr.io/push-to-date/push-article-reader:latest
+          region: northamerica-northeast1
+          credentials: ${{ secrets.PUSH_ARTICLE_READER_CI_SA }}
+
+      - name: Use Output
+        run: curl "${{ steps.deploy.outputs.url }}"

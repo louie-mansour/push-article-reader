@@ -13,7 +13,9 @@ class ArticleReaderApp(
     private val eventService: ReadEventService) {
 
     fun migrateArticles(articleSource: ArticleSource): Flux<Article> {
+        println("Starting article migration")
         return articleFacade.getArticles(articleSource)
             .flatMap { eventService.publishArticle(it) }
+            .doOnNext { println("Completing article migration") }
     }
 }

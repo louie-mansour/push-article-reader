@@ -16,13 +16,14 @@ class HackerNewsArticleService(
     private val unstructuredArticleService: ArbitraryArticleRepo) : IArticleService {
 
     override fun getArticles(): Flux<Article> {
+        println("Starting to retrieve articles from hacker news")
         return hackerNewsRepo.getTopStories()
             .flatMap { story ->
                 unstructuredArticleService.getArticle(story.url)
                     .map { transform(it, story) }
-                    .onErrorContinue { err, i -> print("$i, $err") }
+                    .doOnNext { println("Retrieved article from HackerNews") }
             }
-            .onErrorContinue { err, i -> print("$i, $err") }
+            .onErrorContinue { err, i -> println("$i, $err") }
     }
 
     private fun transform(arbitraryArticleDto: ArbitraryArticleDto, hackerNewsStoryDto: HackerNewsStoryDto): Article {

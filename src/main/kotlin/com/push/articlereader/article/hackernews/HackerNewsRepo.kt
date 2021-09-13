@@ -15,9 +15,7 @@ class HackerNewsRepo(@Qualifier("hackerNewsClient") private val hackerNewsClient
     fun getTopStories(): Flux<HackerNewsStoryDto> {
         return getTopStoryIds()
             .delayElements(Duration.ofMillis(DELAY_BETWEEN_ARTICLES_MILLIS))
-            .doOnNext { println("start: $it")}
             .flatMap { getStory(it) }
-            .doOnNext { println("end:  ${it.id}")}
             .filter { it.type == "story" && !it.dead && !it.deleted && it.url.isNotBlank() }
     }
 

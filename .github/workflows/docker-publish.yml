@@ -31,7 +31,6 @@ jobs:
           project_id: push-to-date
           image_name: push-article-reader
           image_tag: latest
-#          image_name: ${{ env.IMAGE_NAME }}
 
       - name: Deploy to Cloud Run
         id: deploy

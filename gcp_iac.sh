@@ -34,6 +34,7 @@ gcloud run deploy push-article-reader-run \
   --max-instances=1 \
   --timeout=5m \
   --region=northamerica-northeast1 \
+  --no-allow-unauthenticated \
   --service-account=push-article-reader-run@push-to-date.iam.gserviceaccount.com
 
 # Cloud Scheduler account and policy bindings
@@ -50,6 +51,7 @@ gcloud scheduler jobs create http push-article-reader-scheduler --schedule "0 * 
   --oidc-service-account-email=push-article-reader-scheduler@push-to-date.iam.gserviceaccount.com \
   --oidc-token-audience="https://push-article-reader-run-izmeb2u2pa-nn.a.run.app/migrate?sources=hacker-news"
 
-# Pubsub
+# PubSub
 gcloud pubsub topics create article-read-events \
   --message-retention-duration=7d
+gcloud auth application-default login

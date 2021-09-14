@@ -22,6 +22,8 @@ dependencies {
 	implementation("org.jetbrains.kotlinx:kotlinx-coroutines-reactor:1.5.2-native-mt")
 	implementation("org.jsoup:jsoup:1.14.2")
 	implementation("org.springframework.boot:spring-boot-starter-webflux:2.5.4")
+	implementation("org.springframework.cloud:spring-cloud-gcp-dependencies:1.2.8.RELEASE")
+	implementation("org.springframework.cloud:spring-cloud-gcp-starter-pubsub:1.2.8.RELEASE")
 	testImplementation("io.projectreactor:reactor-test:3.4.9")
 	testImplementation("org.springframework.boot:spring-boot-starter-test:2.5.4")
 }

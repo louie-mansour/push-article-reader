@@ -16,6 +16,5 @@ class ArticleReaderApp(
         println("Starting article migration")
         return articleFacade.getArticles(articleSource)
             .flatMap { eventService.publishArticle(it) }
-            .doOnNext { println("Completing article migration") }
     }
 }

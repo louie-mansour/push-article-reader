@@ -15,13 +15,17 @@ import reactor.kotlin.core.publisher.toFlux
 @Configuration
 class ArticleHandler(private val articleReaderApp: ArticleReaderApp) {
 
+    fun test(): Mono<ServerResponse> {
+        return ok().contentType(MediaType.APPLICATION_JSON).body(BodyInserters.fromValue(""))
+    }
+
     fun migrateArticles(serverRequest: ServerRequest): Mono<ServerResponse> {
         val articleSourcesSet = serverRequest
             .queryParamOrNull("sources")
             ?.split(",")
             ?.flatMap { ArticleSource.create(it) }
             ?.distinct()
-            ?: throw IllegalArgumentException("Must include query parameter 'article-sources'")
+            ?: throw IllegalArgumentException("Must include query parameter 'sources'")
 
         return articleSourcesSet
             .toFlux()

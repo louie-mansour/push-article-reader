@@ -9,10 +9,11 @@ import reactor.core.publisher.Mono
 class ReadEventService(private val eventClient: EventClient) {
 
     fun publishArticle(article: Article): Mono<Article> {
+        println("Creating read article event: ${article.url}")
         return Mono.just(article)
             .map { transform(it) }
             .flatMap { eventClient.publishReadEvent(it) }
-            .thenReturn(article)
+            .then(Mono.just(article))
     }
 
     private fun transform(article: Article): ReadArticleEvent {

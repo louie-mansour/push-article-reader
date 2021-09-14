@@ -29,7 +29,9 @@ jobs:
           gcloud_service_key: ${{ secrets.PUSH_ARTICLE_READER_CI_SA }}
           registry: gcr.io
           project_id: push-to-date
-          image_name: ${{ env.IMAGE_NAME }}
+          image_name: push-article-reader
+          image_tag: latest
+#          image_name: ${{ env.IMAGE_NAME }}
 
       - name: Deploy to Cloud Run
         id: deploy

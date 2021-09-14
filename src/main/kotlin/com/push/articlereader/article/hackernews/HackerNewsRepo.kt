@@ -40,7 +40,7 @@ class HackerNewsRepo(@Qualifier("hackerNewsClient") private val hackerNewsClient
     companion object {
         private const val TOP_STORIES_URI = "/v0/topstories.json"
         private const val ARTICLE_URI = "/v0/item"
-        private const val ARTICLE_LIMIT = 200L
+        private const val ARTICLE_LIMIT = 10L
         private const val DELAY_BETWEEN_ARTICLES_MILLIS = 50L
     }
 }

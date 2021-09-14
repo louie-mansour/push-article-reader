@@ -11,6 +11,7 @@ class RoutingConfiguration(private val articleHandler: ArticleHandler) {
     fun articleRouter() = router {
         (accept(MediaType.APPLICATION_JSON)).nest {
             POST("/migrate").invoke { articleHandler.migrateArticles(it) }
+            GET("/test").invoke { articleHandler.test() }
         }
     }
 }
